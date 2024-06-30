@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Profile 1": {
+      "commandName": "Project",
+      "commandLineArgs": "filename C:\\Users\\hents\\Desktop\\breaks.txt"
+    }
+  }
+}
