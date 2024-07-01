@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 
 BreakManager breakManager = new BreakManager();
-
 string? filePath = ArgsParser.Parse(args);
 
 if (filePath != null)
