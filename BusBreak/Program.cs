@@ -5,10 +5,12 @@ string? filePath = ArgsParser.ParseArgs(args); // File path form passed argument
 
 if (filePath != null)
 {
-    List<Time> times = FileReader.GetBreakTimesFromFile(filePath);
-    foreach (Time time in times) breakCalculator.AddTime(time);
-
-    Console.WriteLine(breakCalculator.CalculateBusiestBreakTime());
+    if (filePath != "no_path")
+    {
+        List<Time> times = FileReader.GetBreakTimesFromFile(filePath);
+        foreach (Time time in times) breakCalculator.AddTime(time);
+        Console.WriteLine(breakCalculator.CalculateBusiestBreakTime());
+    }
 }
 else Environment.Exit(0);
 

@@ -12,8 +12,7 @@ namespace BusBreak
             switch (args.Length)
             {
                 case 0:
-                    Console.WriteLine("No arguments given!");
-                    break;
+                    return "no_path";
 
                 case 1:
                     if (args[0].ToLower() == "filename")
