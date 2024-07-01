@@ -1,36 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BusBreak
 {
     internal class ArgsParser
     {
-        public static string? Parse(string[] args)
+        /* Parses passed command line arguments
+         * Arguments passed correctly: returns file path containing break times
+         * Arguments passed incorrectly: notifies the user and returns null
+         */
+        public static string? ParseArgs(string[] args)
         {
             switch (args.Length)
             {
                 case 0:
                     Console.WriteLine("No arguments given!");
-                    return null;
+                    break;
 
                 case 1:
-                    Console.WriteLine(
-                        args[0].ToLower() == "filename" ?
-                        "No file path specified!" :
-                        $"Unknown argument {args[0]}"
-                        );
-                    return null;
+                    if (args[0].ToLower() == "filename")
+                    {
+                        Console.WriteLine("No file path specified!");
+                    }
+                    else Console.WriteLine($"Unknown argument {args[0]}"); ;
+                    break;
 
                 case 2:
-                    return args[0].ToLower() == "filename" ? args[1] : null;
+                    if (args[0].ToLower() == "filename")
+                    {
+                        if (args[1].EndsWith(".txt")) return args[1];
+                        else Console.WriteLine("File is not a .txt file!"); ;
+                    }
+                    else Console.WriteLine($"Unknown argument {args[0]}");
+                    break;
 
-                default:
+                case > 2:
                     Console.WriteLine("Too many arguments!");
-                    return null;
+                    break;
             }
+
+            Console.WriteLine("Use arguments: filename <file path>");
+            return null;
         }
     }
 }

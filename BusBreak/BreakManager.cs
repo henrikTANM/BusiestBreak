@@ -1,83 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-
+﻿
 namespace BusBreak
 {
+    /* BreakManager
+     * Holds break start and end times as Time objects
+     * and uses them to calculate the busiest break time. 
+     */
     internal class BreakManager
     {
-        private List<TimeObject> times;
+        private readonly List<Time> times;
 
-        public BreakManager() { times = new List<TimeObject>(); }
+        public BreakManager() { times = new List<Time>(); }
 
-        public void AddTime(TimeObject timeObject) 
+        // Insert Time objects into times list in ascending order
+        public void AddTime(Time newTime) 
         {
-            foreach (TimeObject time in times)
+            foreach (Time time in times)
             {
-                if (timeObject.IsSameTime(time) & !timeObject.isStartTime) continue;
-                if (timeObject.IsSameTime(time) | timeObject.IsBefore(time))
+                if (newTime.IsSameTime(time) & !newTime.isStartTime) continue;
+                if (newTime.IsSameTime(time) | newTime.IsBefore(time))
                 {
-                    times.Insert(times.IndexOf(time), timeObject);
+                    times.Insert(times.IndexOf(time), newTime);
                     return;
                 }
             }
-            times.Add(timeObject);
+            times.Add(newTime);
         }
 
+        // Get break times from given file
         public void GetBreaksFromFile(string filePath)
         {
-            try
-            {
-                StreamReader streamReader = new StreamReader(filePath);
-                string? line = streamReader.ReadLine();
-
-                while (line != null)
-                {
-                    AddTime(new TimeObject(line[..5], true));
-                    AddTime(new TimeObject(line[5..], false));
-                    line = streamReader.ReadLine();
-                }
-
-                streamReader.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Environment.Exit(0);
-            }
+            List<Time> newTimes = FileReader.GetBreakTimesFromFile(filePath);
+            foreach (Time time in newTimes) AddTime(time);
         }
 
+        // Calculate busiest break time
         public string GetBusiestBreakTime()
         {
-            int max = 0;
-            int current = 0;
-            string maxStart = "";
-            string maxEnd = "";
+            int max = 0; // maximum number of concurrent break takers found
+            int current = 0; // current number of break takers
+            string maxStart = ""; // start time of busiest break time
+            string maxEnd = ""; // end time of busiest break time
             bool newMax = false;
 
-            foreach (TimeObject timeObject in times)
+            // loops through sorted list of break start and end times
+            foreach (Time time in times)
             {
-                Console.WriteLine(timeObject + " " + timeObject.isStartTime);
+                // adds or subtracts based on start or end time 
+                current += time.isStartTime ? 1 : -1;
 
-                current += timeObject.isStartTime ? 1 : -1;
-                if (current > max) 
+                if (current > max)
                 { 
                     max = current; 
                     newMax = true;
-                    maxStart = timeObject.ToString();
+                    maxStart = time.ToString();
                 }
                 if (current + 1 == max & newMax)
                 {
                     newMax = false;
-                    maxEnd = timeObject.ToString();
+                    maxEnd = time.ToString();
                 }
             }
+
             return 
                 "The busiest time is " + maxStart + "-" + maxEnd + 
-                " with total of " + max.ToString() + " drivers taking a break.";
+                " with total of " + max.ToString() + " drivers taking a break.\n";
         }
     }
 }

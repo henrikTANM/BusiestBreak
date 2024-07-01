@@ -1,21 +1,17 @@
 ﻿using BusBreak;
-using System.Text.RegularExpressions;
 
-BreakManager breakManager = new BreakManager();
-string? filePath = ArgsParser.Parse(args);
+BreakManager breakManager = new();
+string? filePath = ArgsParser.ParseArgs(args); // File path form passed arguments
 
 if (filePath != null)
 {
     breakManager.GetBreaksFromFile(filePath);
     Console.WriteLine(breakManager.GetBusiestBreakTime());
 }
-else
-{
-    Console.WriteLine("Use arguments: filename <file path>");
-    Environment.Exit(0);
-}
+else Environment.Exit(0);
 
-string correctBreakFormat = @"^([0-2][0-9]:[0-5][0-9]){2}$";
+Console.WriteLine(
+    "Enter a new break time or 'exit' to exit the application.");
 
 while (true)
 {
@@ -26,24 +22,23 @@ while (true)
     {
         if (input == "exit") { Environment.Exit(0); }
 
-        Match match = Regex.Match(input, correctBreakFormat);
-
-        if (match.Success)
+        if (BreakChecker.CheckRegex(input))
         {
-            TimeObject start = new(input[..5], true);
-            TimeObject end = new(input[5..], false);
+            Time start = new(input[..5], true);
+            Time end = new(input[5..], false);
             
             if (start.IsBefore(end))
             {
-                Console.WriteLine("Break added");
-
                 breakManager.AddTime(start);
                 breakManager.AddTime(end);
+                Console.WriteLine("Break added!");
                 Console.WriteLine(breakManager.GetBusiestBreakTime());
             }
             else
             {
-                Console.WriteLine("Incorrect time values, start time must be before end time!");
+                Console.WriteLine(
+                    "Incorrect time values, " +
+                    "start time must be before end time!");
             }
         } 
         else
