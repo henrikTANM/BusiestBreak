@@ -18,6 +18,8 @@ namespace BusBreak
             this.isStartTime = isStartTime;
         }
 
+
+
         // Checks if this time is before given time
         public bool IsBefore(Time time)
         {
@@ -26,11 +28,15 @@ namespace BusBreak
             return false;
         }
 
+
+
         // Checks if this time and the given time match
         public bool IsSameTime(Time time)
         {
             return h == time.h & m == time.m;
         }
+
+
 
         public override string ToString()
         {

@@ -5,11 +5,13 @@ namespace BusBreak
      * Holds break start and end times as Time objects
      * and uses them to calculate the busiest break time. 
      */
-    internal class BreakManager
+    internal class BreakCalculator
     {
         private readonly List<Time> times;
 
-        public BreakManager() { times = new List<Time>(); }
+        public BreakCalculator() { times = new List<Time>(); }
+
+
 
         // Insert Time objects into times list in ascending order
         public void AddTime(Time newTime) 
@@ -26,15 +28,10 @@ namespace BusBreak
             times.Add(newTime);
         }
 
-        // Get break times from given file
-        public void GetBreaksFromFile(string filePath)
-        {
-            List<Time> newTimes = FileReader.GetBreakTimesFromFile(filePath);
-            foreach (Time time in newTimes) AddTime(time);
-        }
+
 
         // Calculate busiest break time
-        public string GetBusiestBreakTime()
+        public string CalculateBusiestBreakTime()
         {
             int max = 0; // maximum number of concurrent break takers found
             int current = 0; // current number of break takers
@@ -63,7 +60,7 @@ namespace BusBreak
 
             return 
                 "The busiest time is " + maxStart + "-" + maxEnd + 
-                " with total of " + max.ToString() + " drivers taking a break.\n";
+                " with total of " + max + " drivers taking a break.\n";
         }
     }
 }

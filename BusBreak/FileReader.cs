@@ -10,6 +10,7 @@ namespace BusBreak
         public static List<Time> GetBreakTimesFromFile(string filePath)
         {
             List<Time> times = new List<Time>();
+
             try
             {
                 StreamReader streamReader = new StreamReader(filePath);
@@ -39,7 +40,7 @@ namespace BusBreak
                         Console.WriteLine(
                             "Break on line " +
                             lineCounter +
-                            " not added: First time must be before second!");
+                            " not added: Start time must be before end time!");
                         line = streamReader.ReadLine();
                         continue;
                     }
